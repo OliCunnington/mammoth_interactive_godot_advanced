@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://cpn36aqm2rnuk"]
+
+[ext_resource type="PackedScene" uid="uid://bva7u83jvaqkb" path="res://new features/objects/BigPlatform.tscn" id="1_yhlne"]
+[ext_resource type="Script" path="res://new features/scripts/new_player.gd" id="2_2nhdo"]
+[ext_resource type="PackedScene" uid="uid://xy8rvnjp22n5" path="res://models/character.glb" id="3_8gc71"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xboq4"]
+height = 1.19249
+
+[node name="MainGame" type="Node3D"]
+
+[node name="BigPlatform" parent="." instance=ExtResource("1_yhlne")]
+
+[node name="View" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.83, 5.42509)
+
+[node name="Camera3D" type="Camera3D" parent="View"]
+
+[node name="NewPlayer" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.152547, 0)
+script = ExtResource("2_2nhdo")
+
+[node name="character2" parent="NewPlayer" instance=ExtResource("3_8gc71")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.528254, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NewPlayer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.04764, 0)
+shape = SubResource("CapsuleShape3D_xboq4")
