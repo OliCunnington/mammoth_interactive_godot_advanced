@@ -1,8 +1,11 @@
 extends CharacterBody3D
 
 @export var view: Node3D
+@export var coins := 0
 
 @onready var model = $character
+
+signal coin_collected
 
 var movement_speed = 250
 var movement_velocity: Vector3
@@ -78,3 +81,8 @@ func jump():
 	
 	jump_single = false
 	jump_double = true
+
+
+func collect_coin():
+	coins += 1
+	coin_collected.emit(coins)

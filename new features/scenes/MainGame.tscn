@@ -1,16 +1,47 @@
-[gd_scene load_steps=6 format=3 uid="uid://cpn36aqm2rnuk"]
+[gd_scene load_steps=10 format=3 uid="uid://cpn36aqm2rnuk"]
 
 [ext_resource type="PackedScene" uid="uid://bva7u83jvaqkb" path="res://new features/objects/BigPlatform.tscn" id="1_yhlne"]
 [ext_resource type="Script" path="res://new features/scripts/CameraHandler.gd" id="2_1tnyn"]
-[ext_resource type="Script" path="res://new features/scripts/new_player.gd" id="2_2nhdo"]
+[ext_resource type="Script" path="res://new features/scripts/NewPlayer.gd" id="2_2nhdo"]
 [ext_resource type="PackedScene" uid="uid://xy8rvnjp22n5" path="res://models/character.glb" id="3_8gc71"]
+[ext_resource type="Script" path="res://new features/scripts/NewCoin.gd" id="5_36imb"]
+[ext_resource type="PackedScene" uid="uid://e64a4omgpcs" path="res://models/coin.glb" id="6_7xc6h"]
+[ext_resource type="Script" path="res://new features/scripts/NewHUD.gd" id="7_f6jaw"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xboq4"]
 height = 1.19249
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_7a5go"]
+
 [node name="MainGame" type="Node3D"]
 
-[node name="BigPlatform" parent="." instance=ExtResource("1_yhlne")]
+[node name="InitialPlatform" type="Node3D" parent="."]
+
+[node name="BigPlatform" parent="InitialPlatform" instance=ExtResource("1_yhlne")]
+
+[node name="BigPlatform2" parent="InitialPlatform" instance=ExtResource("1_yhlne")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
+
+[node name="BigPlatform3" parent="InitialPlatform" instance=ExtResource("1_yhlne")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
+
+[node name="BigPlatform4" parent="InitialPlatform" instance=ExtResource("1_yhlne")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+
+[node name="BigPlatform5" parent="InitialPlatform" instance=ExtResource("1_yhlne")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 5)
+
+[node name="BigPlatform6" parent="InitialPlatform" instance=ExtResource("1_yhlne")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 5)
+
+[node name="BigPlatform7" parent="InitialPlatform" instance=ExtResource("1_yhlne")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="BigPlatform8" parent="InitialPlatform" instance=ExtResource("1_yhlne")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -5)
+
+[node name="BigPlatform9" parent="InitialPlatform" instance=ExtResource("1_yhlne")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -5)
 
 [node name="View" type="Node3D" parent="." node_paths=PackedStringArray("target")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.83, 5.42509)
@@ -30,3 +61,29 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.528254, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NewPlayer"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.04764, 0)
 shape = SubResource("CapsuleShape3D_xboq4")
+
+[node name="Coin" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1, 0)
+script = ExtResource("5_36imb")
+
+[node name="Mesh" parent="Coin" instance=ExtResource("6_7xc6h")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Coin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.231868, 0)
+shape = SubResource("SphereShape3D_7a5go")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("7_f6jaw")
+
+[node name="Coins" type="Label" parent="HUD"]
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 48
+text = "0"
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.34202, -0.719846, 0.604023, 0, 0.642788, 0.766044, -0.939693, 0.262003, -0.219846, 0, 0.152547, 0)
+shadow_enabled = true
+
+[connection signal="coin_collected" from="NewPlayer" to="HUD" method="_on_coin_collected"]
+[connection signal="body_entered" from="Coin" to="Coin" method="_on_body_entered"]
