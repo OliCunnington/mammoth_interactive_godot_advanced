@@ -104,6 +104,10 @@ zoom_out={
 ]
 }
 
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+
 [rendering]
 
 anti_aliasing/quality/screen_space_aa=1

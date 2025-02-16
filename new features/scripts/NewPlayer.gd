@@ -7,6 +7,8 @@ extends CharacterBody3D
 
 signal coin_collected
 
+var moveJoystick : Vector3
+
 var movement_speed = 250
 var movement_velocity: Vector3
 var gravity: float = 0
@@ -62,7 +64,11 @@ func handle_controls(delta):
 	input.x = Input.get_axis("move_left", "move_right")
 	input.z = Input.get_axis("move_forward", "move_back")
 	
-	input = input.rotated(Vector3.UP, view.rotation.y).normalized()
+	if moveJoystick == Vector3.ZERO:
+		input = input.rotated(Vector3.UP, view.rotation.y).normalized()
+	else:
+		input = moveJoystick.rotated(Vector3.UP, view.rotation.y).normalized()
+	
 	movement_velocity = input * movement_speed * delta
 	
 	if Input.is_action_just_pressed("jump"):
@@ -86,3 +92,8 @@ func jump():
 func collect_coin():
 	coins += 1
 	coin_collected.emit(coins)
+
+
+func _on_move_dir(dir):
+	moveJoystick = dir
+	
