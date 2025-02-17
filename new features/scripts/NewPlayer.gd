@@ -2,10 +2,13 @@ extends CharacterBody3D
 
 @export var view: Node3D
 @export var coins := 0
+@export var bullet : PackedScene
+@export var shoot_speed : float
 
 @onready var model = $character
 @onready var animation = $character/AnimationPlayer
 @onready var animation_tree := $character/AnimationTree
+@onready var bullet_spawner := $BulletSpawner
 
 signal coin_collected
 
@@ -35,6 +38,8 @@ func _physics_process(delta):
 	
 	velocity = applied_velocity
 	move_and_slide()
+	# animations call
+	handle_effects()
 	
 	if position.y < -10:
 		get_tree().reload_current_scene()
@@ -53,7 +58,6 @@ func _physics_process(delta):
 	
 	previously_floored = is_on_floor()
 	
-	handle_effects()
 
 
 func handle_effects():
@@ -96,6 +100,14 @@ func handle_controls(delta):
 			model.scale = Vector3(0.5, 1.5, 0.5)
 		
 		if(jump_single): jump()
+	
+	if Input.is_action_just_pressed("shoot"):
+		var shot = bullet.instantiate()
+		owner.add_child(shot)
+		shot.global_position = bullet_spawner.global_position
+		var velocity_vector = (bullet_spawner.global_position - Vector3(global_position.x, bullet_spawner.global_position.y, global_position.z)).normalized()
+		shot.RB.linear_velocity = velocity_vector * shoot_speed
+		shot.look_at(shot.global_position + velocity_vector, Vector3.UP)
 
 
 func jump():

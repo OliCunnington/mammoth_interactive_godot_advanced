@@ -1,9 +1,10 @@
-[gd_scene load_steps=48 format=4 uid="uid://cpn36aqm2rnuk"]
+[gd_scene load_steps=49 format=4 uid="uid://cpn36aqm2rnuk"]
 
 [ext_resource type="PackedScene" uid="uid://bva7u83jvaqkb" path="res://new features/objects/BigPlatform.tscn" id="1_yhlne"]
 [ext_resource type="Script" path="res://new features/scripts/CameraHandler.gd" id="2_1tnyn"]
 [ext_resource type="Script" path="res://new features/scripts/NewPlayer.gd" id="2_2nhdo"]
 [ext_resource type="Texture2D" uid="uid://0odt7cvj574e" path="res://models/Textures/colormap.png" id="4_fimcg"]
+[ext_resource type="PackedScene" uid="uid://bkt7clelr8rhf" path="res://new features/scenes/Bullet.tscn" id="4_lbth3"]
 [ext_resource type="Script" path="res://new features/scripts/NewCoin.gd" id="5_36imb"]
 [ext_resource type="PackedScene" uid="uid://e64a4omgpcs" path="res://models/coin.glb" id="6_7xc6h"]
 [ext_resource type="Script" path="res://new features/scripts/NewHUD.gd" id="7_f6jaw"]
@@ -963,6 +964,8 @@ target = NodePath("../NewPlayer")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0813651, 0)
 script = ExtResource("2_2nhdo")
 view = NodePath("../View")
+bullet = ExtResource("4_lbth3")
+shoot_speed = 1.0
 
 [node name="character" type="Node3D" parent="NewPlayer"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.528254, 0)
@@ -1019,6 +1022,9 @@ parameters/OneShot/request = 0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NewPlayer"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.04764, 0)
 shape = SubResource("CapsuleShape3D_xboq4")
+
+[node name="BulletSpawner" type="Node3D" parent="NewPlayer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01565, 0.619265)
 
 [node name="Coin" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1, 0)
