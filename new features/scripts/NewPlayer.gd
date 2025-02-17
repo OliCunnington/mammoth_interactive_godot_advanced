@@ -4,6 +4,8 @@ extends CharacterBody3D
 @export var coins := 0
 
 @onready var model = $character
+@onready var animation = $character/AnimationPlayer
+@onready var animation_tree := $character/AnimationTree
 
 signal coin_collected
 
@@ -50,6 +52,22 @@ func _physics_process(delta):
 		model.scale = Vector3(1.25, 0.75, 1.25)
 	
 	previously_floored = is_on_floor()
+	
+	handle_effects()
+
+
+func handle_effects():
+	if is_on_floor():
+		if abs(velocity.x) > 1 or abs(velocity.z) > 1:
+			animation_tree["parameters/Blend2/blend_amount"] = 1
+			#animation.play("CustomAnimations/CustomWalk", 0.5)
+		else:
+			animation_tree["parameters/Blend2/blend_amount"] = 0
+			#animation.play("CustomAnimations/CustomIdle", 0.5)
+	else:
+		if !animation_tree.get("parameters/OneShot/active"):
+			animation_tree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		#animation.play("CustomAnimations/CustomJump", 0.5)
 
 
 func handle_gravity(delta):
