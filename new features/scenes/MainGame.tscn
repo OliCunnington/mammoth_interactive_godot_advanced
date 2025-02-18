@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=4 uid="uid://cpn36aqm2rnuk"]
+[gd_scene load_steps=55 format=4 uid="uid://cpn36aqm2rnuk"]
 
 [ext_resource type="PackedScene" uid="uid://bva7u83jvaqkb" path="res://new features/objects/BigPlatform.tscn" id="1_yhlne"]
 [ext_resource type="Script" path="res://new features/scripts/CameraHandler.gd" id="2_1tnyn"]
@@ -14,6 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://ctvsakfj86val" path="res://kenney_onscreen-controls/Sprites/flat-dark/flatDark00.png" id="9_es2cm"]
 [ext_resource type="Texture2D" uid="uid://0077au5j6qot" path="res://kenney_onscreen-controls/Sprites/flat-light/flatLight09.png" id="10_8asyj"]
 [ext_resource type="Texture2D" uid="uid://6l6ur33nbhy6" path="res://kenney_onscreen-controls/Sprites/flat-light/flatLight24.png" id="11_sgl26"]
+[ext_resource type="Script" path="res://new features/scripts/destructable_wall.gd" id="15_d5n46"]
+[ext_resource type="Texture2D" uid="uid://m3s7gq03oo1p" path="res://new features/models/Destructable wall_0.png" id="16_7mnqf"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fkkar"]
 resource_name = "colormap"
@@ -923,6 +925,50 @@ ssao_radius = 0.45
 ssao_intensity = 1.0
 ssao_power = 15.0
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_behbn"]
+resource_name = "material_0"
+transparency = 2
+alpha_scissor_threshold = 0.05
+alpha_antialiasing_mode = 0
+cull_mode = 2
+albedo_texture = ExtResource("16_7mnqf")
+texture_filter = 0
+texture_repeat = false
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ujddw"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1, 1),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("AgABAAAAAgADAAEABgAFAAQABgAHAAUABAACAAAABAAFAAIAAwAGAAEAAwAHAAYAAQAEAAAAAQAGAAQABQADAAIABQAHAAMA"),
+"name": "material_0",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("////////AAD//wAA//8AAP////8AAAAA//8AAAAAAAAAAP////8AAAAA//8AAAAAAAAAAP//AAAAAAAAAAAAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_6jhtv"]
+resource_name = "blockbench_export_mesh"
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1, 1),
+"attribute_data": PackedByteArray("AAAAAAAA/z//PwAA/z//P/8/AAAAAAAA/z//PwAA/z//P/8//z8AAAAA/z8AAAAA/z8AAAAAAAD/P/8/AAD/P/8/AAAAAAAA/z//PwAA/z8AAAAAAAD/P/8/AAD/P/8/"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AgABAAAAAgADAAEABgAFAAQABgAHAAUACgAJAAgACgALAAkADgANAAwADgAPAA0AEgARABAAEgATABEAFgAVABQAFgAXABUA"),
+"material": SubResource("StandardMaterial3D_behbn"),
+"name": "material_0",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("/////////7///wAA////v/////8AAP+///8AAAAA/78AAP//////vwAA//8AAP+/AAAAAP///78AAAAAAAD/v/////////+//////wAA/78AAP//////vwAA//8AAP+///8AAP///78AAAAA////v///AAAAAP+/AAAAAAAA/7////////8AgAAA/////wCA//8AAP//AIAAAAAA//8AgP////8AAP////8AAAAA//8AAP//AAD//wAAAAAAAP///38AAP9/AAD/fwAA/38AAP9/////f////3////9///////9/////f////3////9/AAD/fwAA/38AAP9/AAD/f/9/////f////3////9/////f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_ujddw")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qrovm"]
+
 [node name="MainGame" type="Node3D"]
 
 [node name="InitialPlatform" type="Node3D" parent="."]
@@ -965,7 +1011,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0813651, 0)
 script = ExtResource("2_2nhdo")
 view = NodePath("../View")
 bullet = ExtResource("4_lbth3")
-shoot_speed = 1.0
+shoot_speed = 50.0
 
 [node name="character" type="Node3D" parent="NewPlayer"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.528254, 0)
@@ -1090,6 +1136,31 @@ shadow_enabled = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_eqfos")
 
+[node name="DestructableWall" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.508076, 3.5349)
+axis_lock_linear_x = true
+axis_lock_linear_y = true
+axis_lock_linear_z = true
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("15_d5n46")
+
+[node name="blockbench_export" type="Node3D" parent="DestructableWall"]
+
+[node name="Node" type="Node3D" parent="DestructableWall/blockbench_export"]
+
+[node name="cuboid" type="MeshInstance3D" parent="DestructableWall/blockbench_export/Node"]
+mesh = SubResource("ArrayMesh_6jhtv")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DestructableWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.504116, 0)
+shape = SubResource("BoxShape3D_qrovm")
+
 [connection signal="coin_collected" from="NewPlayer" to="HUD" method="_on_coin_collected"]
 [connection signal="body_entered" from="Coin" to="Coin" method="_on_body_entered"]
 [connection signal="move_dir" from="HUD/MovementJoystick" to="NewPlayer" method="_on_move_dir"]
+[connection signal="body_entered" from="DestructableWall" to="DestructableWall" method="_on_body_entered"]
