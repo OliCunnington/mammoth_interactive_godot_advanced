@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=4 uid="uid://cpn36aqm2rnuk"]
+[gd_scene load_steps=56 format=4 uid="uid://cpn36aqm2rnuk"]
 
 [ext_resource type="PackedScene" uid="uid://bva7u83jvaqkb" path="res://new features/objects/BigPlatform.tscn" id="1_yhlne"]
 [ext_resource type="Script" path="res://new features/scripts/CameraHandler.gd" id="2_1tnyn"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://0077au5j6qot" path="res://kenney_onscreen-controls/Sprites/flat-light/flatLight09.png" id="10_8asyj"]
 [ext_resource type="Texture2D" uid="uid://6l6ur33nbhy6" path="res://kenney_onscreen-controls/Sprites/flat-light/flatLight24.png" id="11_sgl26"]
 [ext_resource type="Script" path="res://new features/scripts/destructable_wall.gd" id="15_d5n46"]
+[ext_resource type="Texture2D" uid="uid://op46atyixvyf" path="res://kenney_onscreen-controls/Sprites/flat-light/flatLight46.png" id="15_uwp5n"]
 [ext_resource type="Texture2D" uid="uid://m3s7gq03oo1p" path="res://new features/models/Destructable wall_0.png" id="16_7mnqf"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fkkar"]
@@ -1129,6 +1130,12 @@ texture_normal = ExtResource("11_sgl26")
 texture_pressed = ExtResource("11_sgl26")
 action = "jump"
 
+[node name="Button2" type="TouchScreenButton" parent="HUD"]
+position = Vector2(1125, 459)
+texture_normal = ExtResource("15_uwp5n")
+texture_pressed = ExtResource("15_uwp5n")
+action = "shoot"
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.34202, -0.719846, 0.604023, 0, 0.642788, 0.766044, -0.939693, 0.262003, -0.219846, 0, 0.152547, 0)
 shadow_enabled = true
@@ -1137,7 +1144,7 @@ shadow_enabled = true
 environment = SubResource("Environment_eqfos")
 
 [node name="DestructableWall" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.508076, 3.5349)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.15728, 0.512568, 3.5349)
 axis_lock_linear_x = true
 axis_lock_linear_y = true
 axis_lock_linear_z = true
@@ -1160,7 +1167,106 @@ skeleton = NodePath("")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.504116, 0)
 shape = SubResource("BoxShape3D_qrovm")
 
+[node name="DestructableWall2" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.15728, 0.512568, 1.9915)
+axis_lock_linear_x = true
+axis_lock_linear_z = true
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("15_d5n46")
+
+[node name="blockbench_export" type="Node3D" parent="DestructableWall2"]
+
+[node name="Node" type="Node3D" parent="DestructableWall2/blockbench_export"]
+
+[node name="cuboid" type="MeshInstance3D" parent="DestructableWall2/blockbench_export/Node"]
+mesh = SubResource("ArrayMesh_6jhtv")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DestructableWall2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.504116, 0)
+shape = SubResource("BoxShape3D_qrovm")
+
+[node name="DestructableWall3" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.15728, 0.512568, -0.0485833)
+axis_lock_linear_x = true
+axis_lock_linear_z = true
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+mass = 5.0
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("15_d5n46")
+
+[node name="blockbench_export" type="Node3D" parent="DestructableWall3"]
+
+[node name="Node" type="Node3D" parent="DestructableWall3/blockbench_export"]
+
+[node name="cuboid" type="MeshInstance3D" parent="DestructableWall3/blockbench_export/Node"]
+mesh = SubResource("ArrayMesh_6jhtv")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DestructableWall3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.504116, 0)
+shape = SubResource("BoxShape3D_qrovm")
+
+[node name="DestructableWall4" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.15728, 0.512568, -2.46954)
+axis_lock_linear_x = true
+axis_lock_linear_z = true
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+mass = 10.0
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("15_d5n46")
+
+[node name="blockbench_export" type="Node3D" parent="DestructableWall4"]
+
+[node name="Node" type="Node3D" parent="DestructableWall4/blockbench_export"]
+
+[node name="cuboid" type="MeshInstance3D" parent="DestructableWall4/blockbench_export/Node"]
+mesh = SubResource("ArrayMesh_6jhtv")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DestructableWall4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.504116, 0)
+shape = SubResource("BoxShape3D_qrovm")
+
+[node name="DestructableWall5" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.15728, 0.512568, -4.99862)
+axis_lock_linear_x = true
+axis_lock_linear_z = true
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+mass = 20.0
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("15_d5n46")
+
+[node name="blockbench_export" type="Node3D" parent="DestructableWall5"]
+
+[node name="Node" type="Node3D" parent="DestructableWall5/blockbench_export"]
+
+[node name="cuboid" type="MeshInstance3D" parent="DestructableWall5/blockbench_export/Node"]
+mesh = SubResource("ArrayMesh_6jhtv")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DestructableWall5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.504116, 0)
+shape = SubResource("BoxShape3D_qrovm")
+
 [connection signal="coin_collected" from="NewPlayer" to="HUD" method="_on_coin_collected"]
 [connection signal="body_entered" from="Coin" to="Coin" method="_on_body_entered"]
 [connection signal="move_dir" from="HUD/MovementJoystick" to="NewPlayer" method="_on_move_dir"]
 [connection signal="body_entered" from="DestructableWall" to="DestructableWall" method="_on_body_entered"]
+[connection signal="body_entered" from="DestructableWall2" to="DestructableWall2" method="_on_body_entered"]
+[connection signal="body_entered" from="DestructableWall3" to="DestructableWall3" method="_on_body_entered"]
+[connection signal="body_entered" from="DestructableWall4" to="DestructableWall4" method="_on_body_entered"]
+[connection signal="body_entered" from="DestructableWall5" to="DestructableWall5" method="_on_body_entered"]
