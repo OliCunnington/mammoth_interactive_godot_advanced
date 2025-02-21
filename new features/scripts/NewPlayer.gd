@@ -4,6 +4,7 @@ extends CharacterBody3D
 @export var coins := 0
 @export var bullet : PackedScene
 @export var shoot_speed : float
+@export var push_force : float
 
 @onready var model = $character
 @onready var animation = $character/AnimationPlayer
@@ -38,6 +39,11 @@ func _physics_process(delta):
 	
 	velocity = applied_velocity
 	move_and_slide()
+	#handle collisions
+	for i in get_slide_collision_count():
+		var collision = get_slide_collision(i)
+		if collision.get_collider() is RigidBody3D:
+			collision.get_collider().linear_velocity = applied_velocity * push_force
 	# animations call
 	handle_effects()
 	
