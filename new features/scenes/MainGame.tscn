@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=4 uid="uid://cpn36aqm2rnuk"]
+[gd_scene load_steps=71 format=4 uid="uid://cpn36aqm2rnuk"]
 
 [ext_resource type="PackedScene" uid="uid://bva7u83jvaqkb" path="res://new features/objects/BigPlatform.tscn" id="1_yhlne"]
 [ext_resource type="Script" path="res://new features/scripts/CameraHandler.gd" id="2_1tnyn"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://new features/scripts/NewCoin.gd" id="5_36imb"]
 [ext_resource type="PackedScene" uid="uid://e64a4omgpcs" path="res://models/coin.glb" id="6_7xc6h"]
 [ext_resource type="Script" path="res://new features/scripts/NewHUD.gd" id="7_f6jaw"]
+[ext_resource type="Texture2D" uid="uid://bs6puxrivhkk2" path="res://sprites/particle.png" id="8_hub7a"]
 [ext_resource type="Script" path="res://new features/scripts/MovementJoystick.gd" id="8_quxny"]
 [ext_resource type="Texture2D" uid="uid://cd7oyc56ehkx1" path="res://sprites/coin.png" id="8_sfqjb"]
 [ext_resource type="LabelSettings" uid="uid://c756qcv3lm6y5" path="res://new features/coin.ls.tres" id="9_01yqc"]
@@ -22,6 +23,7 @@
 [ext_resource type="Texture2D" uid="uid://op46atyixvyf" path="res://kenney_onscreen-controls/Sprites/flat-light/flatLight46.png" id="15_uwp5n"]
 [ext_resource type="Texture2D" uid="uid://m3s7gq03oo1p" path="res://new features/models/Destructable wall_0.png" id="16_7mnqf"]
 [ext_resource type="PackedScene" uid="uid://xab248fcvcfx" path="res://new features/scenes/b_door.tscn" id="22_govjr"]
+[ext_resource type="PackedScene" uid="uid://ynwmjsp5oct4" path="res://new features/scenes/portal.tscn" id="23_l686q"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fkkar"]
 resource_name = "colormap"
@@ -916,6 +918,19 @@ height = 1.09942
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_7a5go"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cuh0x"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("8_hub7a")
+billboard_mode = 1
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_dyyg8"]
+
+[sub_resource type="Curve" id="Curve_3y4qe"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.502475, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_bikvk"]
 radius = 51.0098
 
@@ -1161,6 +1176,17 @@ script = ExtResource("5_36imb")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.231868, 0)
 shape = SubResource("SphereShape3D_7a5go")
 
+[node name="CPUParticles3D" type="CPUParticles3D" parent="Coin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.202764, 0)
+material_override = SubResource("StandardMaterial3D_cuh0x")
+mesh = SubResource("QuadMesh_dyyg8")
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_max = 1.0
+scale_amount_min = 0.1
+scale_amount_max = 0.1
+scale_amount_curve = SubResource("Curve_3y4qe")
+
 [node name="HUD" type="CanvasLayer" parent="."]
 script = ExtResource("7_f6jaw")
 
@@ -1360,6 +1386,9 @@ mesh = SubResource("ArrayMesh_qeli3")
 skeleton = NodePath("")
 
 [node name="BDoor" parent="." instance=ExtResource("22_govjr")]
+
+[node name="Portal" parent="." instance=ExtResource("23_l686q")]
+transform = Transform3D(0.6, 0, 0, 0, 1.305, 0, 0, 0, 0.005, 4.50154, 2.41393, -3.78641)
 
 [connection signal="coin_collected" from="NewPlayer" to="HUD" method="_on_coin_collected"]
 [connection signal="body_entered" from="Coin" to="Coin" method="_on_body_entered"]

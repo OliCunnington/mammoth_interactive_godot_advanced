@@ -1,0 +1,49 @@
+[gd_scene load_steps=7 format=3 uid="uid://ynwmjsp5oct4"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rc6qs"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 1.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.8
+gravity = Vector3(0, 0, 0)
+sub_emitter_mode = 1
+sub_emitter_frequency = 20.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lkiue"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0)
+
+[sub_resource type="SphereMesh" id="SphereMesh_cy7p3"]
+material = SubResource("StandardMaterial3D_lkiue")
+radius = 0.125
+height = 0.125
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mfdvn"]
+lifetime_randomness = 0.1
+gravity = Vector3(0, 0, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d3y3f"]
+transparency = 1
+blend_mode = 1
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_48gwl"]
+material = SubResource("StandardMaterial3D_d3y3f")
+radius = 0.05
+height = 0.05
+
+[node name="Portal" type="Node3D"]
+transform = Transform3D(0.6, 0, 0, 0, 1.305, 0, 0, 0, 0.005, 0, 0, 0)
+
+[node name="MainParticle" type="GPUParticles3D" parent="."]
+amount = 1000
+sub_emitter = NodePath("../SubParticle")
+process_material = SubResource("ParticleProcessMaterial_rc6qs")
+draw_pass_1 = SubResource("SphereMesh_cy7p3")
+
+[node name="SubParticle" type="GPUParticles3D" parent="."]
+amount = 2000
+lifetime = 0.2
+process_material = SubResource("ParticleProcessMaterial_mfdvn")
+draw_pass_1 = SubResource("SphereMesh_48gwl")
