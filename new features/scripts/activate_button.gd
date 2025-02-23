@@ -1,11 +1,19 @@
 extends Area3D
 
-@export var target: Node3D
+@export var target: Array[Node3D]
 
 
 func _on_body_entered(body):
-	target.openDoor = true
+	for i in target.size():
+		if target[i].has_method("scaleControl"):
+			target[i].openDoor = true
+		elif target[i].get_child(0).has_method("scaleControl"):
+			target[i].get_child(0).openDoor = true
 
 
 func _on_body_exited(body):
-	target.openDoor = false
+	for i in target.size():
+		if target[i].has_method("scaleControl"):
+			target[i].openDoor = false
+		elif target[i].get_child(0).has_method("scaleControl"):
+			target[i].get_child(0).openDoor = false
