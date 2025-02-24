@@ -7,3 +7,4 @@ func _on_body_entered(body) -> void:
 		body.collect_coin()
 		$Mesh.queue_free()
 		grabbed = true
+		$CPUParticles3D.emitting = false

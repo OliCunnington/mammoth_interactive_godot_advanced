@@ -10,6 +10,7 @@ extends CharacterBody3D
 @onready var animation = $character/AnimationPlayer
 @onready var animation_tree := $character/AnimationTree
 @onready var bullet_spawner := $BulletSpawner
+@onready var particles_trail := $ParticleTrail
 
 signal coin_collected
 
@@ -67,9 +68,12 @@ func _physics_process(delta):
 
 
 func handle_effects():
+	particles_trail.emitting = false
+	
 	if is_on_floor():
 		if abs(velocity.x) > 1 or abs(velocity.z) > 1:
 			animation_tree["parameters/Blend2/blend_amount"] = 1
+			particles_trail.emitting = true
 			#animation.play("CustomAnimations/CustomWalk", 0.5)
 		else:
 			animation_tree["parameters/Blend2/blend_amount"] = 0
