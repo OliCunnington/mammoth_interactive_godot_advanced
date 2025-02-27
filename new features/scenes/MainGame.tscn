@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=4 uid="uid://cpn36aqm2rnuk"]
+[gd_scene load_steps=83 format=4 uid="uid://cpn36aqm2rnuk"]
 
 [ext_resource type="PackedScene" uid="uid://bva7u83jvaqkb" path="res://new features/objects/BigPlatform.tscn" id="1_yhlne"]
 [ext_resource type="Script" path="res://new features/scripts/CameraHandler.gd" id="2_1tnyn"]
@@ -26,6 +26,8 @@
 [ext_resource type="PackedScene" uid="uid://ynwmjsp5oct4" path="res://new features/scenes/portal.tscn" id="23_l686q"]
 [ext_resource type="Script" path="res://new features/scripts/newCloud.gd" id="25_b8hr8"]
 [ext_resource type="Script" path="res://new features/scripts/Falling.gd" id="25_wr57k"]
+[ext_resource type="Script" path="res://new features/scripts/enemy.gd" id="27_eohrw"]
+[ext_resource type="PackedScene" uid="uid://c4gfpx045dwos" path="res://new features/models/Enemies/Rat.gltf" id="28_7pqcw"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fkkar"]
 resource_name = "colormap"
@@ -1121,6 +1123,12 @@ shadow_mesh = SubResource("ArrayMesh_k778b")
 [sub_resource type="BoxShape3D" id="BoxShape3D_owigj"]
 size = Vector3(2.01068, 0.472656, 2.00635)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_b1jxm"]
+size = Vector3(1, 0.64505, 1.28857)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2x12k"]
+size = Vector3(0.800293, 1, 1)
+
 [node name="MainGame" type="Node3D"]
 
 [node name="InitialPlatform" type="Node3D" parent="."]
@@ -1504,6 +1512,28 @@ shape = SubResource("BoxShape3D_owigj")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00527954, 0.391177, -0.0012207)
 shape = SubResource("BoxShape3D_owigj")
 
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.132, 0.5, 3.28891)
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+contact_monitor = true
+max_contacts_reported = 2
+script = ExtResource("27_eohrw")
+moveZ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.326043, 0.144287)
+shape = SubResource("BoxShape3D_b1jxm")
+
+[node name="RatEnemy" parent="RigidBody3D" instance=ExtResource("28_7pqcw")]
+
+[node name="StompArea" type="Area3D" parent="RigidBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D/StompArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0227051, 0.549932, 0)
+shape = SubResource("BoxShape3D_2x12k")
+
 [connection signal="coin_collected" from="NewPlayer" to="HUD" method="_on_coin_collected"]
 [connection signal="move_dir" from="HUD/MovementJoystick" to="NewPlayer" method="_on_move_dir"]
 [connection signal="body_entered" from="DestructableWall" to="DestructableWall" method="_on_body_entered"]
@@ -1515,3 +1545,5 @@ shape = SubResource("BoxShape3D_owigj")
 [connection signal="body_exited" from="Button/ActivateButton" to="Button/ActivateButton" method="_on_body_exited"]
 [connection signal="body_entered" from="Button2/ActivateButton" to="Button2/ActivateButton" method="_on_body_entered"]
 [connection signal="body_entered" from="platform-falling/Area3D" to="platform-falling" method="_on_area_3d_body_entered"]
+[connection signal="body_entered" from="RigidBody3D" to="RigidBody3D" method="_on_body_entered"]
+[connection signal="body_entered" from="RigidBody3D/StompArea" to="RigidBody3D" method="_on_stomp_area_body_entered"]

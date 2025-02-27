@@ -44,7 +44,10 @@ func _physics_process(delta):
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
 		if collision.get_collider() is RigidBody3D:
+			if collision.get_collider().has_method("RatEnemy"):
+				get_tree().reload_current_scene()
 			collision.get_collider().linear_velocity = applied_velocity * push_force
+			
 	# animations call
 	handle_effects()
 	
@@ -136,4 +139,7 @@ func collect_coin():
 
 func _on_move_dir(dir):
 	moveJoystick = dir
-	
+
+
+func PlayerChar():
+	pass
