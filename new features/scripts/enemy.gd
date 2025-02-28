@@ -48,5 +48,5 @@ func RatEnemy():
 
 
 func _on_stomp_area_body_entered(body):
-	if body.has_method("PlayerChar"):
+	if body.has_method("PlayerChar") and !body.is_on_floor():
 		queue_free()
