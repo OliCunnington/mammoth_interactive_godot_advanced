@@ -20,8 +20,8 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Audio="*res://scripts/audio.gd"
 GlobalVar="*res://new features/scripts/GlobalVar.gd"
+Audio="*res://new features/scripts/new_audio.gd"
 
 [display]
 

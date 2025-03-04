@@ -1,4 +1,4 @@
-[gd_scene load_steps=88 format=4 uid="uid://cpn36aqm2rnuk"]
+[gd_scene load_steps=89 format=4 uid="uid://cpn36aqm2rnuk"]
 
 [ext_resource type="PackedScene" uid="uid://bva7u83jvaqkb" path="res://new features/objects/BigPlatform.tscn" id="1_yhlne"]
 [ext_resource type="Script" path="res://new features/scripts/CameraHandler.gd" id="2_1tnyn"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://0odt7cvj574e" path="res://models/Textures/colormap.png" id="4_fimcg"]
 [ext_resource type="PackedScene" uid="uid://bkt7clelr8rhf" path="res://new features/scenes/Bullet.tscn" id="4_lbth3"]
 [ext_resource type="ArrayMesh" uid="uid://deu06eho4c74" path="res://new features/models/meshes/dust.res" id="6_s8bif"]
+[ext_resource type="AudioStream" uid="uid://cydjn1ct3hps2" path="res://sounds/walking.ogg" id="7_ak54v"]
 [ext_resource type="Script" path="res://new features/scripts/NewHUD.gd" id="7_f6jaw"]
 [ext_resource type="PackedScene" uid="uid://chaps5ll7f4wq" path="res://new features/scenes/NewCoin.tscn" id="7_kwpas"]
 [ext_resource type="Script" path="res://new features/scripts/MovementJoystick.gd" id="8_quxny"]
@@ -1274,6 +1275,12 @@ gravity = Vector3(0, 0.1, 0)
 scale_amount_min = 0.5
 scale_amount_curve = SubResource("Curve_eo0s0")
 
+[node name="Footsteps" type="AudioStreamPlayer3D" parent="NewPlayer"]
+stream = ExtResource("7_ak54v")
+volume_db = -5.0
+pitch_scale = 1.25
+autoplay = true
+
 [node name="HUD" type="CanvasLayer" parent="."]
 script = ExtResource("7_f6jaw")
 
@@ -1579,7 +1586,6 @@ shape = SubResource("BoxShape3D_2x12k")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Enemys/StateMachineRat/DetectionArea"]
 shape = SubResource("SphereShape3D_a7k7w")
 
-[connection signal="coin_collected" from="NewPlayer" to="HUD" method="_on_coin_collected"]
 [connection signal="move_dir" from="HUD/MovementJoystick" to="NewPlayer" method="_on_move_dir"]
 [connection signal="body_entered" from="Destructibles/DestructableWall" to="Destructibles/DestructableWall" method="_on_body_entered"]
 [connection signal="body_entered" from="Destructibles/DestructableWall2" to="Destructibles/DestructableWall2" method="_on_body_entered"]

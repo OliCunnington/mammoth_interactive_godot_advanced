@@ -11,6 +11,8 @@ extends CharacterBody3D
 @onready var animation_tree := $character/AnimationTree
 @onready var bullet_spawner := $BulletSpawner
 @onready var particles_trail := $ParticleTrail
+@onready var footsteps := $Footsteps
+
 
 signal coin_collected
 
@@ -27,6 +29,13 @@ var rotation_direction: float
 var previously_floored := false
 var jump_single := true
 var jump_double := false
+
+
+func _ready():
+	if get_parent().get_children().filter(func(n): return n.has_method("_on_coin_collected")).size() > 0:
+		var hud = get_parent().find_children("HUD")[0]
+		coin_collected.connect(hud._on_coin_collected)
+
 
 func _physics_process(delta):
 	handle_controls(delta)
@@ -72,11 +81,12 @@ func _physics_process(delta):
 
 func handle_effects():
 	particles_trail.emitting = false
-	
+	footsteps.stream_paused = true
 	if is_on_floor():
 		if abs(velocity.x) > 1 or abs(velocity.z) > 1:
 			animation_tree["parameters/Blend2/blend_amount"] = 1
 			particles_trail.emitting = true
+			footsteps.stream_paused = false
 			#animation.play("CustomAnimations/CustomWalk", 0.5)
 		else:
 			animation_tree["parameters/Blend2/blend_amount"] = 0
@@ -107,6 +117,9 @@ func handle_controls(delta):
 	movement_velocity = input * movement_speed * delta
 	
 	if Input.is_action_just_pressed("jump"):
+		if jump_single or jump_double:
+			Audio.play("res://sounds/jump.ogg")
+		
 		if(jump_double):
 			gravity = -jump_strength
 			jump_double = false
