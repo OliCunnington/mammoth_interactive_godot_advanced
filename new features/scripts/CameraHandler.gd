@@ -25,11 +25,12 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	self.position = self.position.lerp(target.position, delta * 4)
-	rotation_degrees = rotation_degrees.lerp(camera_rotation, delta * 6)
+	if target:
+		self.position = self.position.lerp(target.position, delta * 4)
+		rotation_degrees = rotation_degrees.lerp(camera_rotation, delta * 6)
 	
-	camera.position = camera.position.lerp(Vector3(0,0,zoom), 8*delta)
-	handle_input(delta)
+		camera.position = camera.position.lerp(Vector3(0,0,zoom), 8*delta)
+		handle_input(delta)
 
 
 func handle_input(delta):
@@ -44,4 +45,7 @@ func handle_input(delta):
 	#zoom
 	zoom += Input.get_axis("zoom_in", "zoom_out") * zoom_speed * delta
 	zoom = clamp(zoom, zoom_maximum, zoom_minimum)
-	
+
+
+func cameraView():
+	pass

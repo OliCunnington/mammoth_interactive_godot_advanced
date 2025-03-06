@@ -35,6 +35,13 @@ func _ready():
 	if get_parent().get_children().filter(func(n): return n.has_method("_on_coin_collected")).size() > 0:
 		var hud = get_parent().find_children("HUD")[0]
 		coin_collected.connect(hud._on_coin_collected)
+		var movj = hud.find_children("MovementJoystick")[0]
+		movj.move_dir.connect(_on_move_dir)
+	
+	if get_parent().get_children().filter(func(n): return n.has_method("cameraView")).size() > 0:
+		var viewObj = get_parent().find_children("View")[0]
+		view = viewObj
+		viewObj.target = self
 
 
 func _physics_process(delta):
@@ -109,10 +116,11 @@ func handle_controls(delta):
 	input.x = Input.get_axis("move_left", "move_right")
 	input.z = Input.get_axis("move_forward", "move_back")
 	
-	if moveJoystick == Vector3.ZERO:
-		input = input.rotated(Vector3.UP, view.rotation.y).normalized()
-	else:
-		input = moveJoystick.rotated(Vector3.UP, view.rotation.y).normalized()
+	if view:
+		if moveJoystick == Vector3.ZERO:
+			input = input.rotated(Vector3.UP, view.rotation.y).normalized()
+		else:
+			input = moveJoystick.rotated(Vector3.UP, view.rotation.y).normalized()
 	
 	movement_velocity = input * movement_speed * delta
 	
