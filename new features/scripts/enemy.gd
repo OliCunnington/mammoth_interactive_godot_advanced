@@ -17,21 +17,22 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	movement = (cos(time * time_mul) * distance_con) * delta
-	if(moveZ):
-		position.z += movement
-		if(movement > 0):
-			rotation_degrees.y = 0
-		else:
-			rotation_degrees.y = 180
-	if(moveX):
-		position.x += movement
-		if(movement > 0):
-			rotation_degrees.y = 90
-		else:
-			rotation_degrees.y = -90
+	if get_multiplayer_authority() == multiplayer.get_unique_id() or !GlobalVar.multiplayerObj:
+		movement = (cos(time * time_mul) * distance_con) * delta
+		if(moveZ):
+			position.z += movement
+			if(movement > 0):
+				rotation_degrees.y = 0
+			else:
+				rotation_degrees.y = 180
+		if(moveX):
+			position.x += movement
+			if(movement > 0):
+				rotation_degrees.y = 90
+			else:
+				rotation_degrees.y = -90
 	
-	time += delta
+		time += delta
 
 
 func _on_body_entered(body):

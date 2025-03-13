@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=4 uid="uid://c3vb5t30c52n6"]
+[gd_scene load_steps=50 format=4 uid="uid://c3vb5t30c52n6"]
 
 [ext_resource type="PackedScene" uid="uid://bva7u83jvaqkb" path="res://new features/objects/BigPlatform.tscn" id="1_g7f28"]
 [ext_resource type="Script" path="res://new features/scripts/CameraHandler.gd" id="2_cuqmw"]
@@ -22,15 +22,13 @@
 [ext_resource type="Texture2D" uid="uid://caebqvngvcf2m" path="res://new features/models/Door_0.png" id="23_nwpym"]
 [ext_resource type="PackedScene" uid="uid://xab248fcvcfx" path="res://new features/scenes/b_door.tscn" id="24_0nlqy"]
 [ext_resource type="PackedScene" uid="uid://ynwmjsp5oct4" path="res://new features/scenes/portal.tscn" id="25_y0pas"]
+[ext_resource type="PackedScene" uid="uid://dldtu68qyxjjj" path="res://new features/scenes/rat_enemy.tscn" id="26_ctbkg"]
 [ext_resource type="PackedScene" uid="uid://crp0ptp5tlnyw" path="res://new features/scenes/MainMenu.tscn" id="26_ndhxr"]
+[ext_resource type="PackedScene" uid="uid://bqmahf60l0wdb" path="res://new features/scenes/state_machine_rat.tscn" id="27_bhuts"]
 [ext_resource type="Script" path="res://new features/scripts/Falling.gd" id="27_koxuo"]
 [ext_resource type="PackedScene" uid="uid://chaps5ll7f4wq" path="res://new features/scenes/NewCoin.tscn" id="28_klrc4"]
 [ext_resource type="Script" path="res://new features/scripts/newCloud.gd" id="29_geyp7"]
 [ext_resource type="Script" path="res://new features/scripts/multiplayer_spawner.gd" id="30_3q46t"]
-[ext_resource type="Script" path="res://new features/scripts/enemy.gd" id="30_hbrsg"]
-[ext_resource type="PackedScene" uid="uid://c4gfpx045dwos" path="res://new features/models/Enemies/Rat.gltf" id="31_dn02x"]
-[ext_resource type="Script" path="res://new features/scripts/state_machine_rat.gd" id="32_pwd5c"]
-[ext_resource type="PackedScene" uid="uid://dynmi1t23hv4m" path="res://new features/models/Enemies/GreenRat.gltf" id="33_tx860"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bikvk"]
 radius = 51.0098
@@ -230,15 +228,6 @@ transparency = 1
 distance_fade_mode = 1
 distance_fade_min_distance = 2.0
 distance_fade_max_distance = 3.0
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_b1jxm"]
-size = Vector3(1, 0.64505, 1.28857)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_2x12k"]
-size = Vector3(0.800293, 1, 1)
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_a7k7w"]
-radius = 3.5
 
 [node name="MainGame" type="Node3D"]
 
@@ -575,53 +564,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_khyhg")
 
 [node name="Enemys" type="Node3D" parent="."]
 
-[node name="RatEnemy" type="RigidBody3D" parent="Enemys"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.132, 0.5, 3.28891)
-axis_lock_angular_x = true
-axis_lock_angular_y = true
-axis_lock_angular_z = true
-contact_monitor = true
-max_contacts_reported = 2
-script = ExtResource("30_hbrsg")
-moveZ = true
+[node name="RatEnemy" parent="Enemys" instance=ExtResource("26_ctbkg")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemys/RatEnemy"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.326043, 0.144287)
-shape = SubResource("BoxShape3D_b1jxm")
-
-[node name="RatEnemy" parent="Enemys/RatEnemy" instance=ExtResource("31_dn02x")]
-
-[node name="StompArea" type="Area3D" parent="Enemys/RatEnemy"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemys/RatEnemy/StompArea"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0227051, 0.549932, 0)
-shape = SubResource("BoxShape3D_2x12k")
-
-[node name="StateMachineRat" type="RigidBody3D" parent="Enemys"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.19389, 0.5, -4.3546)
-axis_lock_angular_x = true
-axis_lock_angular_y = true
-axis_lock_angular_z = true
-contact_monitor = true
-max_contacts_reported = 2
-script = ExtResource("32_pwd5c")
-
-[node name="GreenRat" parent="Enemys/StateMachineRat" instance=ExtResource("33_tx860")]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemys/StateMachineRat"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.326043, 0.144287)
-shape = SubResource("BoxShape3D_b1jxm")
-
-[node name="StompArea" type="Area3D" parent="Enemys/StateMachineRat"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemys/StateMachineRat/StompArea"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0227051, 0.549932, 0)
-shape = SubResource("BoxShape3D_2x12k")
-
-[node name="DetectionArea" type="Area3D" parent="Enemys/StateMachineRat"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemys/StateMachineRat/DetectionArea"]
-shape = SubResource("SphereShape3D_a7k7w")
+[node name="StateMachineRat" parent="Enemys" instance=ExtResource("27_bhuts")]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://new features/scenes/new_player.tscn")
@@ -642,8 +587,3 @@ spawn_position = Vector3(1, 1, 1)
 [connection signal="body_exited" from="Interactables/Button/ActivateButton" to="Interactables/Button/ActivateButton" method="_on_body_exited"]
 [connection signal="body_entered" from="Interactables/Button2/ActivateButton" to="Interactables/Button2/ActivateButton" method="_on_body_entered"]
 [connection signal="body_entered" from="Interactables/platform-falling/Area3D" to="Interactables/platform-falling" method="_on_area_3d_body_entered"]
-[connection signal="body_entered" from="Enemys/RatEnemy" to="Enemys/RatEnemy" method="_on_body_entered"]
-[connection signal="body_entered" from="Enemys/RatEnemy/StompArea" to="Enemys/RatEnemy" method="_on_stomp_area_body_entered"]
-[connection signal="body_entered" from="Enemys/StateMachineRat" to="Enemys/StateMachineRat" method="_on_body_entered"]
-[connection signal="body_entered" from="Enemys/StateMachineRat/StompArea" to="Enemys/StateMachineRat" method="_on_stomp_area_body_entered"]
-[connection signal="body_entered" from="Enemys/StateMachineRat/DetectionArea" to="Enemys/StateMachineRat" method="_on_detection_area_body_entered"]

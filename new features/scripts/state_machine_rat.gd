@@ -23,43 +23,44 @@ func _ready():
 
 
 func _physics_process(delta):
-	if get_contact_count() == 0:
-		handle_gravity(delta)
-	else:
-		gravity = 0
-	
-	if currentState == States.ROAMING:
-		if new_dir == Vector3.ZERO:
-			new_dir.x = randf_range(-1.0, 1.0)
-			new_dir.z = randf_range(-1.0, 1.0)
-			new_dir.y = -gravity
-			new_dir = new_dir.normalized()
-			new_dir = new_dir*roamingSpeed*delta
-		if target:
-			currentState = States.CHASING
-	elif currentState == States.CHASING:
-		if target:
-			new_dir = target.position - position
-			new_dir.y = -gravity
-			if new_dir.length() < maxLength:
-				new_dir.normalized()
-				new_dir = new_dir * chasingSpeed * delta
-			else:
-				target = null
-				new_dir = Vector3.ZERO
-				currentState = States.ROAMING
-	linear_velocity = new_dir
-	
-	if Vector2(new_dir.z, new_dir.x).length() > 0:
-		rotation_direction = Vector2(new_dir.z, new_dir.x).angle()
-	
-	rotation.y = lerp_angle(rotation.y, rotation_direction, delta * 10)
-	
-	time += delta
-	
-	if time > timeMax:
-		time = 0
-		new_dir = Vector3.ZERO
+	if get_multiplayer_authority() == multiplayer.get_unique_id() or !GlobalVar.multiplayerObj:
+		if get_contact_count() == 0:
+			handle_gravity(delta)
+		else:
+			gravity = 0
+		
+		if currentState == States.ROAMING:
+			if new_dir == Vector3.ZERO:
+				new_dir.x = randf_range(-1.0, 1.0)
+				new_dir.z = randf_range(-1.0, 1.0)
+				new_dir.y = -gravity
+				new_dir = new_dir.normalized()
+				new_dir = new_dir*roamingSpeed*delta
+			if target:
+				currentState = States.CHASING
+		elif currentState == States.CHASING:
+			if target:
+				new_dir = target.position - position
+				new_dir.y = -gravity
+				if new_dir.length() < maxLength:
+					new_dir.normalized()
+					new_dir = new_dir * chasingSpeed * delta
+				else:
+					target = null
+					new_dir = Vector3.ZERO
+					currentState = States.ROAMING
+		linear_velocity = new_dir
+		
+		if Vector2(new_dir.z, new_dir.x).length() > 0:
+			rotation_direction = Vector2(new_dir.z, new_dir.x).angle()
+		
+		rotation.y = lerp_angle(rotation.y, rotation_direction, delta * 10)
+		
+		time += delta
+		
+		if time > timeMax:
+			time = 0
+			new_dir = Vector3.ZERO
 
 func handle_gravity(delta):
 	gravity += gravity_mul * delta

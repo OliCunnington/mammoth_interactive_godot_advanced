@@ -38,7 +38,11 @@ func _enter_tree():
 
 
 func _ready():
-	if get_multiplayer_authority() == multiplayer.get_unique_id():
+	if GlobalVar.multiplayerObj:
+		if get_parent().get_children().filter(func(n): return n.has_method("multiplayerControl")).size() > 0:
+			GlobalVar.multiplayerObj = get_parent().find_children("MultiplayerSpawner")[0]
+		
+	if get_multiplayer_authority() == multiplayer.get_unique_id() or !GlobalVar.multiplayerObj:
 		
 		if get_parent().get_children().filter(func(n): return n.has_method("_on_coin_collected")).size() > 0:
 			var hud = get_parent().find_children("HUD")[0]
@@ -55,7 +59,7 @@ func _ready():
 func _physics_process(delta):
 	# animations call
 	handle_effects()
-	if get_multiplayer_authority() == multiplayer.get_unique_id():
+	if get_multiplayer_authority() == multiplayer.get_unique_id() or !GlobalVar.multiplayerObj:
 		handle_controls(delta)
 		handle_gravity(delta)
 		
@@ -101,7 +105,7 @@ func handle_effects():
 	particles_trail.emitting = false
 	footsteps.stream_paused = true
 	
-	if get_multiplayer_authority() == multiplayer.get_unique_id():
+	if get_multiplayer_authority() == multiplayer.get_unique_id() or !GlobalVar.multiplayerObj:
 		if is_on_floor():	
 			if abs(velocity.x) > 1 or abs(velocity.z) > 1:
 				animation_tree["parameters/Blend2/blend_amount"] = 1
@@ -162,13 +166,23 @@ func handle_controls(delta):
 		if(jump_single): jump()
 	
 	if Input.is_action_just_pressed("shoot"):
-		var shot = bullet.instantiate()
-		owner.add_child(shot)
-		shot.global_position = bullet_spawner.global_position
-		var velocity_vector = (bullet_spawner.global_position - Vector3(global_position.x, bullet_spawner.global_position.y, global_position.z)).normalized()
-		shot.RB.linear_velocity = velocity_vector * shoot_speed
-		shot.look_at(shot.global_position + velocity_vector, Vector3.UP)
+		shoot()
+		rpc("shoot")
+		#var shot = bullet.instantiate()
+		#owner.add_child(shot)
+		#shot.global_position = bullet_spawner.global_position
+		#var velocity_vector = (bullet_spawner.global_position - Vector3(global_position.x, bullet_spawner.global_position.y, global_position.z)).normalized()
+		#shot.RB.linear_velocity = velocity_vector * shoot_speed
+		#shot.look_at(shot.global_position + velocity_vector, Vector3.UP)
 
+
+@rpc func shoot():
+	var shot = bullet.instantiate()
+	get_parent().add_child(shot)
+	shot.global_position = bullet_spawner.global_position
+	var velocity_vector = (bullet_spawner.global_position - Vector3(global_position.x, bullet_spawner.global_position.y, global_position.z)).normalized()
+	shot.RB.linear_velocity = velocity_vector * shoot_speed
+	shot.look_at(shot.global_position + velocity_vector, Vector3.UP)
 
 func jump():
 	gravity = -jump_strength
