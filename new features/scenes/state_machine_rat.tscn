@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=3 uid="uid://bqmahf60l0wdb"]
+
+[ext_resource type="Script" path="res://new features/scripts/state_machine_rat.gd" id="1_keow1"]
+[ext_resource type="PackedScene" uid="uid://dynmi1t23hv4m" path="res://new features/models/Enemies/GreenRat.gltf" id="2_rpfln"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b1jxm"]
+size = Vector3(1, 0.64505, 1.28857)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2x12k"]
+size = Vector3(0.800293, 1, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_a7k7w"]
+radius = 3.5
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_lefkh"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[node name="StateMachineRat" type="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.19389, 0.5, -4.3546)
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+contact_monitor = true
+max_contacts_reported = 2
+script = ExtResource("1_keow1")
+
+[node name="GreenRat" parent="." instance=ExtResource("2_rpfln")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.326043, 0.144287)
+shape = SubResource("BoxShape3D_b1jxm")
+
+[node name="StompArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StompArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0227051, 0.549932, 0)
+shape = SubResource("BoxShape3D_2x12k")
+
+[node name="DetectionArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DetectionArea"]
+shape = SubResource("SphereShape3D_a7k7w")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_lefkh")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_entered" from="StompArea" to="." method="_on_stomp_area_body_entered"]
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]

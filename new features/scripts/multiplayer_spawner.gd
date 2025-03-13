@@ -24,7 +24,8 @@ func _on_host():
 
 func _add_player(id):
 	var player = player_scene.instantiate()
-	get_parent().add_child(player, true)
+	player.name = str(id)
+	get_parent().call_deferred("add_child", player, true)
 	player.position = spawn_position
 	#call_deferred("add_child", player)
 

@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://dldtu68qyxjjj"]
+
+[ext_resource type="Script" path="res://new features/scripts/enemy.gd" id="1_a1c1p"]
+[ext_resource type="PackedScene" uid="uid://c4gfpx045dwos" path="res://new features/models/Enemies/Rat.gltf" id="2_56xya"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b1jxm"]
+size = Vector3(1, 0.64505, 1.28857)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2x12k"]
+size = Vector3(0.800293, 1, 1)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_1vxca"]
+properties/0/path = NodePath(".:rotation")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:position")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[node name="RatEnemy" type="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.132, 0.5, 3.28891)
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+contact_monitor = true
+max_contacts_reported = 2
+script = ExtResource("1_a1c1p")
+moveZ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.326043, 0.144287)
+shape = SubResource("BoxShape3D_b1jxm")
+
+[node name="RatEnemy" parent="." instance=ExtResource("2_56xya")]
+
+[node name="StompArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StompArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0227051, 0.549932, 0)
+shape = SubResource("BoxShape3D_2x12k")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_1vxca")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_entered" from="StompArea" to="." method="_on_stomp_area_body_entered"]
